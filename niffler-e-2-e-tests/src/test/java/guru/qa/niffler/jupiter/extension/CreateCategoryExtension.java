@@ -1,6 +1,7 @@
-package guru.qa.niffler.jupiter;
+package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.spend.SpendApiClient;
+import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -23,18 +24,16 @@ public class CreateCategoryExtension implements
                             anno.username(),
                             false
                     );
+                    CategoryJson createdCategory = spendApiClient.addCategory(categoryJson);
                     if(anno.archived()) {
-                        CategoryJson createdCategory = spendApiClient.addCategory(categoryJson);
                         CategoryJson archivedCategory =  new CategoryJson(
                                 createdCategory.id(),
                                 createdCategory.name(),
                                 createdCategory.username(),
-                                true
-                        );
-                        context.getStore(NAMESPACE).put(context.getUniqueId(), spendApiClient.updateCategory(archivedCategory));
-                    } else {
-                        context.getStore(NAMESPACE).put(context.getUniqueId(), spendApiClient.addCategory(categoryJson));
+                                true);
+                        createdCategory = spendApiClient.updateCategory(archivedCategory);
                     }
+                    context.getStore(NAMESPACE).put(context.getUniqueId(), createdCategory);
                 });
     }
 

@@ -14,8 +14,18 @@ enum LocalConfig implements Config {
   }
 
   @Override
-  public String registePagerUrl() {
+  public String registerPagerUrl() {
     return "http://127.0.0.1:3000/register";
+  }
+
+  @Override
+  public String friendPageUrl() {
+    return "http://127.0.0.1:3000/people/friends";
+  }
+
+  @Override
+  public String allPeoplePageUrl() {
+    return "http://127.0.0.1:3000/people/all";
   }
 
   @Override
@@ -26,5 +36,10 @@ enum LocalConfig implements Config {
   @Override
   public String spendServiceUrl() {
     return "http://127.0.0.1:8093";
+  }
+
+  @Override
+  public String ghUrl() {
+    return "https://api.github.com";
   }
 }
