@@ -16,6 +16,7 @@ public class RegisterPage {
 
     private final SelenideElement passwordSubmitInput = $("input[name='passwordSubmit']");
     private final SelenideElement submitBtn = $("button[type='submit']");
+    private final SelenideElement errorContainer = $(".form__error");
 
     public RegisterPage setUsername(String username) {
         usernameInput.setValue(username);
@@ -45,19 +46,23 @@ public class RegisterPage {
         return new SuccessRegisterPage();
     }
 
-    public void checkThatPageLoaded() {
+    public RegisterPage doInvalidRegister(String username, String password) {
+        usernameInput.setValue(username);
+        passwordInput.setValue(password);
+        passwordSubmitInput.setValue(password);
+        submitBtn.click();
+        return this;
+    }
+
+    public RegisterPage checkThatPageLoaded() {
         usernameInput.should(exist);
         passwordInput.should(exist);
         passwordSubmitInput.should(exist);
         submitBtn.should(exist);
+        return this;
     }
 
-    public String getUsernameErrorMessage() {
-        return usernameErrorMessage.text();
+    public void checkRegisterError(String errorMessage) {
+        errorContainer.shouldHave(text(errorMessage));
     }
-
-    public String getPasswordErrorMessage() {
-        return passwordErrorMessage.text();
-    }
-
 }

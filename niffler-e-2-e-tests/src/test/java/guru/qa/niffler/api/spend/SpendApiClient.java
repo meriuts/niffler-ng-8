@@ -27,7 +27,7 @@ public class SpendApiClient {
     } catch (IOException ex) {
       throw new AssertionError("API request failed: " + ex.getMessage(), ex);
     }
-    assertEquals(200, response.code());
+    assertEquals(201, response.code());
     return response.body();
   }
 
