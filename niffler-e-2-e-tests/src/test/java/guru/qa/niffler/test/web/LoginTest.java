@@ -2,19 +2,17 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+@ExtendWith(BrowserExtension.class)
 public class LoginTest {
 
     private final static String LOGIN_URL = Config.getInstanceForLocale().loginPageUrl();
-
-    @AfterEach
-    void close() {
-        Selenide.closeWebDriver();
-    }
 
     @Test
     void mainPageShouldBeDisplayAfterSuccessLogin() {

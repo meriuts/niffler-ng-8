@@ -8,11 +8,17 @@ public interface Config {
 
   String loginPageUrl();
 
-  String registePagerUrl();
+  String registerPagerUrl();
 
   String profilePageUrl();
+
+  String friendPageUrl();
+
+  String allPeoplePageUrl();
 
   String gatewayUrl();
 
   String spendServiceUrl();
+
+  String ghUrl();
 }
