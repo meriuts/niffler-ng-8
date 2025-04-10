@@ -33,7 +33,7 @@ public class FriendsTest {
         List<String> expectedFriend = List.of(user.friend());
 
         Selenide.open(FRIEND_URL, FriendsPage.class)
-                .checkThatFriendsExist(expectedFriend);
+                .checkThatUserHasFriends(expectedFriend);
     }
 
     @Test

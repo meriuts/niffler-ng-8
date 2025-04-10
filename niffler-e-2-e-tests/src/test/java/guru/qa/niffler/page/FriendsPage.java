@@ -15,7 +15,7 @@ public class FriendsPage {
     private final SelenideElement requestsTable = $("#requests");
     private final SelenideElement friendsTable = $("#friends");
 
-    public FriendsPage checkThatFriendsExist(List<String> expectedUsernames) {
+    public FriendsPage checkThatUserHasFriends(List<String> expectedUsernames) {
         friendsTable.$$("tr").shouldHave(textsInAnyOrder(expectedUsernames));
         return this;
     }
