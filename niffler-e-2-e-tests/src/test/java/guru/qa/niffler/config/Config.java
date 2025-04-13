@@ -20,5 +20,16 @@ public interface Config {
 
   String spendServiceUrl();
 
+  String userDataServiceUrl();
+
   String ghUrl();
+
+  String authJdbcUrl();
+
+  String userdataJdbcUrl();
+
+  String spendJdbcUrl();
+
+  String currencyJdbcUrl();
+
 }
