@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.spend.SpendApiClient;
-import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -16,7 +16,7 @@ public class CreateCategoryExtension implements
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), Category.class)
+        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
                 .ifPresent(anno -> {
                     CategoryJson categoryJson = new CategoryJson(
                             null,
@@ -25,7 +25,7 @@ public class CreateCategoryExtension implements
                             false
                     );
                     CategoryJson createdCategory = spendApiClient.addCategory(categoryJson);
-                    if(anno.archived()) {
+                    if(anno.categories()[0].archived()) {
                         CategoryJson archivedCategory =  new CategoryJson(
                                 createdCategory.id(),
                                 createdCategory.name(),
