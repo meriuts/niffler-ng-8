@@ -27,7 +27,7 @@ public class CreateCategoryExtension implements
                             user.categories()[0].archived()
                     );
                     CategoryJson createdCategory = spendDbClient.createCategory(categoryJson);
-
+                  
                     context.getStore(NAMESPACE).put(context.getUniqueId(), createdCategory);
                 });
     }
