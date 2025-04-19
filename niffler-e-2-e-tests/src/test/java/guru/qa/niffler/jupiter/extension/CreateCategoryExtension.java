@@ -3,6 +3,7 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.spend.SpendApiClient;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.service.SpendDbClient;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
@@ -12,27 +13,21 @@ public class CreateCategoryExtension implements
         AfterTestExecutionCallback {
     private static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(CreateCategoryExtension.class);
     private final SpendApiClient spendApiClient = new SpendApiClient();
+    private final SpendDbClient spendDbClient = new SpendDbClient();
 
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
-                .ifPresent(anno -> {
+                .ifPresent(user -> {
                     CategoryJson categoryJson = new CategoryJson(
                             null,
-                            anno.username() + Math.random(),
-                            anno.username(),
-                            false
+                            user.username() + Math.random(),
+                            user.username(),
+                            user.categories()[0].archived()
                     );
-                    CategoryJson createdCategory = spendApiClient.addCategory(categoryJson);
-                    if(anno.categories()[0].archived()) {
-                        CategoryJson archivedCategory =  new CategoryJson(
-                                createdCategory.id(),
-                                createdCategory.name(),
-                                createdCategory.username(),
-                                true);
-                        createdCategory = spendApiClient.updateCategory(archivedCategory);
-                    }
+                    CategoryJson createdCategory = spendDbClient.createCategory(categoryJson);
+                  
                     context.getStore(NAMESPACE).put(context.getUniqueId(), createdCategory);
                 });
     }
@@ -50,14 +45,6 @@ public class CreateCategoryExtension implements
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
         CategoryJson category = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
-        if(!category.archived()) {
-            CategoryJson archivedCategory =  new CategoryJson(
-                    category.id(),
-                    category.name(),
-                    category.username(),
-                    true
-            );
-            spendApiClient.updateCategory(archivedCategory);
-        }
+        spendDbClient.deleteCategory(category);
     }
 }
