@@ -1,17 +1,19 @@
 package guru.qa.niffler.data.dao.impl;
 
-import guru.qa.niffler.data.dao.UserdataUserDao;
+import guru.qa.niffler.data.dao.UdUserDao;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UserdataUserDaoJdbc implements UserdataUserDao {
+public class UdUserDaoJdbc implements UdUserDao {
     private final Connection connection;
 
-    public UserdataUserDaoJdbc(Connection connection) {
+    public UdUserDaoJdbc(Connection connection) {
         this.connection = connection;
     }
 
@@ -107,6 +109,32 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
         try (PreparedStatement ps = connection.prepareStatement("DELETE FROM user WHERE id = ?")) {
             ps.setObject(1, user.getId());
             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM user")){
+            ps.execute();
+
+            List<UserEntity> result = new ArrayList<>();
+            try (ResultSet rs = ps.getResultSet()){
+                while (rs.next()) {
+                    UserEntity ue = new UserEntity();
+                    ue.setId(rs.getObject("id", UUID.class));
+                    ue.setUsername(rs.getString("username"));
+                    ue.setCurrency(rs.getObject("currency", CurrencyValues.class));
+                    ue.setFirstname(rs.getString("firstname"));
+                    ue.setSurname(rs.getString("surname"));
+                    ue.setFullname(rs.getString("full_name"));
+                    ue.setPhoto(rs.getBytes("photo"));
+                    ue.setPhotoSmall(rs.getBytes("photo_small"));
+                    result.add(ue);
+                }
+                return result;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
