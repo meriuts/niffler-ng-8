@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.repository.impl;
 
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.data.Databases;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.data.mapper.UdUserEntityRowMapper;
 import guru.qa.niffler.data.repository.UserDataRepository;
@@ -120,6 +121,11 @@ public class UserDataRepositorySpringJdbc implements UserDataRepository {
                     return ps;
                 }
         );
+    }
 
+    @Override
+    public void remove(UserEntity user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(Databases.dataSource(CFG.userdataJdbcUrl()));
+        jdbcTemplate.update("DELETE FROM \"user\" WHERE id = ?", user.getId());
     }
 }

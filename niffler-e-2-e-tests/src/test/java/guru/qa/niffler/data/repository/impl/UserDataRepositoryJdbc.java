@@ -141,4 +141,14 @@ public class UserDataRepositoryJdbc implements UserDataRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void remove(UserEntity user) {
+        try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement("DELETE FROM user WHERE id = ?")) {
+            ps.setObject(1, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
