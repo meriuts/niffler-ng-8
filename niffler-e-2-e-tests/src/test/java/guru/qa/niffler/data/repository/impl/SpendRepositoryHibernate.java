@@ -59,6 +59,9 @@ public class SpendRepositoryHibernate implements SpendRepository {
     @Override
     public void removeCategory(CategoryEntity category) {
         entityManager.joinTransaction();
-        entityManager.remove(category);
+        CategoryEntity managed = entityManager.contains(category)
+                ? category
+                : entityManager.merge(category);
+        entityManager.remove(managed);
     }
 }

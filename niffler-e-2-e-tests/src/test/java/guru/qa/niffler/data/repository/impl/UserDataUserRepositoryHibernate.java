@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.repository.impl;
 
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.userdata.FriendshipStatus;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.data.repository.UserDataRepository;
@@ -61,6 +62,9 @@ public class UserDataUserRepositoryHibernate implements UserDataRepository {
     @Override
     public void remove(UserEntity user) {
         entityManager.joinTransaction();
-        entityManager.remove(user);
+        UserEntity managed = entityManager.contains(user)
+                ? user
+                : entityManager.merge(user);
+        entityManager.remove(managed);
     }
 }
