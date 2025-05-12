@@ -3,7 +3,7 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.spend.SpendApiClient;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.service.SpendDbClient;
+import guru.qa.niffler.service.impl.SpendDbClient;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
@@ -44,7 +44,7 @@ public class CreateCategoryExtension implements
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        CategoryJson category = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
-        spendDbClient.deleteCategory(category);
+//        CategoryJson category = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
+//        spendDbClient.deleteCategory(category);
     }
 }
